@@ -16,7 +16,9 @@ export function CalendarPage() {
   const first = new Date(year, month, 1)
   const offset = (first.getDay() + 6) % 7
   const days = new Date(year, month + 1, 0).getDate()
-  const marks = new Set(checkinDates())
+  const dates = checkinDates()
+  const marks = new Set(dates)
+  const count = dates.length
   const cells: Array<number | null> = []
   for (let i = 0; i < offset; i += 1) cells.push(null)
   for (let day = 1; day <= days; day += 1) cells.push(day)
@@ -41,9 +43,9 @@ export function CalendarPage() {
         </div>
       </div>
       <div className="note">
-        {record.checkin ? '今天已经打卡。' : (
-          <button className="btn" type="button" disabled={!ready} onClick={() => { checkInToday(); setRev((n) => n + 1) }}>标记今天完成</button>
-        )}
+        <button className="btn" type="button" disabled={record.checkin || !ready} onClick={() => { checkInToday(); setRev((n) => n + 1) }}>
+          {record.checkin ? `已打卡 ${count}` : `标记今天完成 ${count}`}
+        </button>
       </div>
       <section className="history">
         <h3>打卡历史</h3>
