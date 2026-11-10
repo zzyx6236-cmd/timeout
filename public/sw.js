@@ -1,5 +1,6 @@
-const CACHE = 'timeout-v1'
-const ASSETS = ['/', '/index.html', '/manifest.webmanifest', '/icon.svg']
+const CACHE = 'timeout-v2'
+const BASE = new URL('./', self.location).pathname
+const ASSETS = [BASE, `${BASE}index.html`, `${BASE}manifest.webmanifest`, `${BASE}icon.svg`]
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)))
   self.skipWaiting()
@@ -17,6 +18,6 @@ self.addEventListener('fetch', (event) => {
       const copy = res.clone()
       caches.open(CACHE).then((cache) => cache.put(event.request, copy))
       return res
-    }).catch(() => caches.match('/'))),
+    }).catch(() => caches.match(BASE))),
   )
 })
